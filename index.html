@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lucky Wheel 2026</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+      :root {
+        --primary: #6366f1;
+        --bg: #0f172a;
+        --glass: rgba(255, 255, 255, 0.05);
+        --border: rgba(255, 255, 255, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+
+      body {
+        background: var(--bg);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      /* Hiệu ứng nền mờ ảo 2026 */
+      .bg-glow {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, var(--primary), transparent 70%);
+        filter: blur(100px);
+        opacity: 0.2;
+        z-index: -1;
+      }
+
+      /* Container chính */
+      .container {
+        background: var(--glass);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        padding: 2rem;
+        border-radius: 24px;
+        text-align: center;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      }
+
+      h1 {
+        margin-bottom: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        outline: none;
+      }
+
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        width: 100%;
+      }
+
+      button:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+
+      /* Vòng quay */
+      #wheel-container {
+        display: none;
+        margin-top: 2rem;
+        position: relative;
+      }
+
+      canvas {
+        max-width: 100%;
+        transition: transform 5s cubic-bezier(0.1, 0, 0.1, 1);
+      }
+
+      /* Kim chỉ vòng quay */
+      .pointer {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 40px;
+        background: #ef4444;
+        clip-path: polygon(50% 100%, 0 0, 100% 0);
+        z-index: 10;
+      }
+
+      #qr-result {
+        display: none;
+        margin-top: 2rem;
+      }
+
+      #qr-code {
+        background: white;
+        padding: 10px;
+        border-radius: 12px;
+        margin: 1rem auto;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+
+    <div class="container">
+      <div id="step-name">
+        <h1>Lì Xì 2026</h1>
+        <p style="margin-bottom: 1rem; opacity: 0.7">
+          Nhập cái tên để xem vận may mày tới đâu
+        </p>
+        <input type="text" id="username" placeholder="Tên mày là gì?" />
+        <button onclick="startApp()">Tiếp tục</button>
+      </div>
+
+      <div id="wheel-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="400" height="400"></canvas>
+        <button id="spin-btn" style="margin-top: 1.5rem" onclick="spinWheel()">
+          QUAY NGAY
+        </button>
+      </div>
+
+      <div id="qr-result">
+        <h2 id="congrats-text"></h2>
+        <div id="qr-code"></div>
+        <p style="margin-top: 1rem; opacity: 0.7">Quét mã này để nhận tiền</p>
+      </div>
+    </div>
+
+    <script>
+      const API_URL = 'https://68edcae6df2025af780116cf.mockapi.io/luckyMoney';
+      const canvas = document.getElementById('wheel');
+      const ctx = canvas.getContext('2d');
+
+      let currentUser = null;
+      const prizes = [10000, 20000, 50000, 100000, 200000, 500000];
+      const colors = [
+        '#6366f1',
+        '#8b5cf6',
+        '#a855f7',
+        '#d946ef',
+        '#ec4899',
+        '#f43f5e',
+      ];
+
+      // Vẽ vòng quay
+      function drawWheel() {
+        const arc = (2 * Math.PI) / prizes.length;
+        prizes.forEach((prize, i) => {
+          const angle = i * arc;
+          ctx.fillStyle = colors[i];
+          ctx.beginPath();
+          ctx.moveTo(200, 200);
+          ctx.arc(200, 200, 200, angle, angle + arc);
+          ctx.fill();
+
+          // Vẽ chữ
+          ctx.save();
+          ctx.translate(200, 200);
+          ctx.rotate(angle + arc / 2);
+          ctx.fillStyle = 'white';
+          ctx.font = 'bold 18px sans-serif';
+          ctx.fillText(prize.toLocaleString() + 'đ', 100, 10);
+          ctx.restore();
+        });
+      }
+
+      // Bắt đầu app
+      async function startApp() {
+        const name = document.getElementById('username').value.trim();
+        if (!name) return Swal.fire('Nhập tên vào!', '', 'error');
+
+        try {
+          // Tạo user mới trên MockAPI
+          const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, money: 0 }),
+          });
+          currentUser = await res.json();
+
+          // Chuyển cảnh
+          document.getElementById('step-name').style.display = 'none';
+          document.getElementById('wheel-container').style.display = 'block';
+          drawWheel();
+        } catch (e) {
+          Swal.fire('Lỗi API rồi mày ơi', '', 'error');
+        }
+      }
+
+      // Xử lý quay
+      async function spinWheel() {
+        const btn = document.getElementById('spin-btn');
+        btn.disabled = true; // Chặn bấm lung tung
+
+        const randomDegree = Math.floor(Math.random() * 360) + 3600; // Quay ít nhất 10 vòng
+        canvas.style.transform = `rotate(${randomDegree}deg)`;
+
+        // Sau khi quay xong (5s theo CSS)
+        setTimeout(async () => {
+          // Tính xem vào ô nào
+          const actualDegree = randomDegree % 360;
+          const prizeIndex =
+            Math.floor((360 - actualDegree) / (360 / prizes.length)) %
+            prizes.length;
+          const finalMoney = prizes[prizeIndex];
+
+          // Cập nhật MockAPI
+          await fetch(`${API_URL}/${currentUser.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ money: finalMoney }),
+          });
+
+          // Hiệu ứng ăn mừng
+          confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+          });
+
+          showResult(finalMoney);
+        }, 5000);
+      }
+
+      // Hiện mã QR
+      function showResult(money) {
+        document.getElementById('wheel-container').style.display = 'none';
+        document.getElementById('qr-result').style.display = 'block';
+        document.getElementById(
+          'congrats-text',
+        ).innerText = `Mày nhận được ${money.toLocaleString()}đ!`;
+
+        // Tạo mã QR bằng API (Ví dụ QR thanh toán hoặc link info)
+        const qrData = `Mày là ${currentUser.name}, ID: ${currentUser.id}, nhận ${money}đ`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+          qrData,
+        )}`;
+
+        document.getElementById(
+          'qr-code',
+        ).innerHTML = `<img src="${qrUrl}" alt="QR">`;
+      }
+    </script>
+  </body>
+</html>
