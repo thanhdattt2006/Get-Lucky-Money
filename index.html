@@ -30,7 +30,7 @@
 
       body {
         /* Thay cái url này bằng đường dẫn file img1.png (gif) của mày */
-        background: url('img1.png') no-repeat center center fixed;
+        background: url('images/img1.png') no-repeat center center fixed;
         background-size: cover;
         /* Fallback nếu ảnh lỗi thì hiện gradient */
         background-color: #8b0000;
@@ -243,21 +243,13 @@
     <div class="glass-panel">
       <!-- Màn hình 1: Nhập tên -->
       <div id="step-1">
-        <div
-          style="
-            font-size: 4rem;
-            margin-bottom: 10px;
-            animation: bounce 2s infinite;
-          "
-        >
-          🧧
-        </div>
+        <!-- Đã xóa icon bao lì xì theo yêu cầu -->
         <h1>Lì Xì Tết 2026</h1>
-        <p>Vòng quay nhân phẩm - Chốt đơn lì xì</p>
+        <p>Vòng quay nhân phẩm - Lì xì cho Đạt nha!</p>
         <input
           type="text"
           id="username"
-          placeholder="Nhập tên đại gia..."
+          placeholder="Nhập tên người lì xì..."
           autocomplete="off"
         />
         <button class="btn-gold" onclick="app.start()">Vào Việc Ngay</button>
@@ -273,7 +265,7 @@
           style="margin-top: 25px"
           onclick="app.spin()"
         >
-          Quay Tay Vận May
+          Quay Tay Chốt Lộc
         </button>
       </div>
 
@@ -286,7 +278,7 @@
         <div class="qr-box">
           <!-- Thay src bằng qr.png của mày -->
           <img
-            src="qr.png"
+            src="images/qr.png"
             alt="QR Thanh Toán"
             id="qr-img"
             onerror="
@@ -296,7 +288,7 @@
         </div>
         <p>Quét mã bank luôn cho nóng nhé! 🎉</p>
         <button class="btn-gold" onclick="location.reload()">
-          Chơi lại (Chắc k ai chơi lại)
+          Chơi lại (Đừng hòng thoát)
         </button>
       </div>
 
@@ -309,7 +301,7 @@
             padding-bottom: 5px;
           "
         >
-          Danh sách Lì Xì
+          Danh sách người Lì Xì
         </h3>
         <table class="admin-table">
           <thead>
@@ -344,17 +336,19 @@
       // Config MockAPI - Mày nhớ check lại xem link này sống không nhé
       const API_URL = 'https://68edcae6df2025af780116cf.mockapi.io/luckyMoney';
 
-      // Cấu hình vòng quay
+      // Cấu hình vòng quay (Giữ nguyên 10 ô như code gốc của mày)
       const CONFIG = {
         slices: [
           { v: 10000, l: '10K' },
           { v: 200000, l: '200K' },
           { v: 10000, l: '10K' },
-          { v: 500000, l: '500K' }, // Giải to
-          { v: 20000, l: '20K' },
-          { v: 50000, l: '50K' },
+          { v: 200000, l: '200K' },
           { v: 10000, l: '10K' },
+          { v: 500000, l: '500K' }, // Giải đặc biệt
+          { v: 10000, l: '10K' },
+          { v: 200000, l: '200K' },
           { v: 100000, l: '100K' },
+          { v: 10000, l: '10K' },
         ],
         colors: ['#c62828', '#ffd700'], // Đỏ - Vàng
         textColors: ['#fff', '#c62828'],
@@ -453,21 +447,23 @@
           btn.disabled = true;
           btn.innerText = 'Đang quay...';
 
-          // Logic Random (Tỉ lệ ra tiền to thấp thôi nhé)
-          // 70% ra 10k/20k, 25% ra 50k/100k, 5% ra 200k/500k
-          const rand = Math.random();
-          let prizeMoney;
+          // Logic Random "hút máu" của mày đây
+          let finalMoney;
+          const rand = Math.random() * 100;
 
-          if (rand < 0.7)
-            prizeMoney = [10000, 20000][Math.floor(Math.random() * 2)];
-          else if (rand < 0.95)
-            prizeMoney = [50000, 100000][Math.floor(Math.random() * 2)];
-          else prizeMoney = [200000, 500000][Math.floor(Math.random() * 2)];
+          // Tỉ lệ ép người chơi phải lì xì to
+          if (rand < 95)
+            finalMoney = 200000; // 95% ra 200k
+          else if (rand < 98)
+            finalMoney = 500000; // 3% ra 500k
+          else if (rand < 99)
+            finalMoney = 100000; // 1% ra 100k
+          else finalMoney = 10000; // 1% ra 10k (nhân phẩm cao lắm mới né được)
 
-          // Tìm vị trí ô có giá trị prizeMoney
+          // Tìm vị trí ô có giá trị finalMoney
           // Lọc ra các index có giá trị trùng khớp
           const possibleIndices = CONFIG.slices
-            .map((s, i) => (s.v === prizeMoney ? i : -1))
+            .map((s, i) => (s.v === finalMoney ? i : -1))
             .filter((i) => i !== -1);
 
           // Chọn ngẫu nhiên 1 ô trong các ô trùng khớp
@@ -477,18 +473,16 @@
           // Tính toán góc quay
           const sliceDeg = 360 / CONFIG.slices.length;
           // Quay ít nhất 5 vòng (1800 độ) + góc tới ô đích
-          // Offset thêm 1 chút để kim chỉ vào giữa ô (sliceDeg / 2)
-          // Trừ đi vì canvas quay theo chiều kim đồng hồ, hệ tọa độ ngược
           const stopAngle =
             360 * 8 + (360 - targetIndex * sliceDeg - sliceDeg / 2);
 
-          // Cộng dồn vào góc quay hiện tại để quay tiếp chứ ko reset
+          // Cộng dồn vào góc quay hiện tại
           this.rotation += stopAngle;
           this.canvas.style.transform = `rotate(${this.rotation}deg)`;
 
           // Hết thời gian quay (8s khớp css transition)
           setTimeout(async () => {
-            await this.finishSpin(prizeMoney);
+            await this.finishSpin(finalMoney);
           }, 8000);
         },
 
@@ -517,8 +511,15 @@
           document.getElementById('step-2').style.display = 'none';
           document.getElementById('step-3').style.display = 'block';
 
+          // Text đúng ý: "Bạn đã lì xì cho Đạt..."
           document.getElementById('congrats-text').innerHTML =
-            `Chúc mừng <b>${this.user.name}</b><br>Đã trúng kèo lì xì: <span style="font-size: 1.5em">${money.toLocaleString()}đ</span>`;
+            `Chúc mừng <b>${this.user.name}</b>!<br/>Bạn đã lì xì cho Đạt <b>${money.toLocaleString()}đ</b> 🎊`;
+
+          // Gen lại QR code với số tiền và lời nhắn
+          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=Dat_Lixi_${money}_tu_${this.user.name}`;
+          const qrImg = document.getElementById('qr-img');
+          // Nếu mày muốn dùng api tạo QR động thì dùng dòng dưới, còn dùng ảnh tĩnh qr.png thì kệ nó
+          // qrImg.src = qrUrl;
         },
 
         // ADMIN: Login & View Data
