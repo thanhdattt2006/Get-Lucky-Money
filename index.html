@@ -1,563 +1,583 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tết 2026 - Lì Xì Cho Đạt</title>
+    <!-- Font ngon lành -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
+    <!-- Libs cũ giữ nguyên -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
+      :root {
+        --primary: #c62828; /* Đỏ */
+        --gold: #ffd700; /* Vàng */
+        --glass: rgba(255, 255, 255, 0.15); /* Màu kính trong suốt */
+        --glass-border: rgba(255, 255, 255, 0.3);
+      }
+
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
       }
 
       body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-          sans-serif;
-        background: linear-gradient(135deg, #c62828 0%, #8b0000 100%);
+        /* Thay cái url này bằng đường dẫn file img1.png (gif) của mày */
+        background: url('img1.png') no-repeat center center fixed;
+        background-size: cover;
+        /* Fallback nếu ảnh lỗi thì hiện gradient */
+        background-color: #8b0000;
         min-height: 100vh;
         display: flex;
-        justify-content: center;
         align-items: center;
-        overflow: hidden;
-        position: relative;
+        justify-content: center;
+        overflow-x: hidden;
+        color: #fff;
       }
 
-      /* Particles hoa mai vàng bay */
-      .particle {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background: radial-gradient(circle, #ffd700 0%, #ffb300 100%);
-        border-radius: 50%;
-        opacity: 0.8;
-        animation: fall linear infinite;
-        pointer-events: none;
+      /* Lớp phủ tối màu để text dễ đọc hơn trên nền gif động */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 0;
       }
 
-      @keyframes fall {
-        0% {
-          transform: translateY(-100vh) rotate(0deg);
-          opacity: 0.9;
-        }
-        100% {
-          transform: translateY(100vh) rotate(360deg);
-          opacity: 0;
-        }
-      }
-
-      /* Decor cây mai góc phải */
-      .decor-mai {
-        position: absolute;
-        top: -20px;
-        right: -50px;
-        width: 350px;
-        opacity: 0.15;
-        pointer-events: none;
-        z-index: 1;
-        animation: sway 4s ease-in-out infinite;
-      }
-
-      @keyframes sway {
-        0%,
-        100% {
-          transform: rotate(0deg);
-        }
-        50% {
-          transform: rotate(3deg);
-        }
-      }
-
-      /* Container chính */
-      .container {
-        background: rgba(255, 255, 255, 0.98);
-        border-radius: 30px;
-        padding: 40px 30px;
-        width: 95%;
-        max-width: 480px;
-        text-align: center;
+      /* Container chính hiệu ứng kính mờ (Glassmorphism) */
+      .glass-panel {
         position: relative;
         z-index: 10;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(10px);
-        animation: slideIn 0.6s ease-out;
-        border: 4px solid #ffd700;
+        background: var(--glass);
+        backdrop-filter: blur(12px); /* Làm mờ nền sau lưng */
+        -webkit-backdrop-filter: blur(12px);
+        border: 2px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 40px 30px;
+        width: 95%;
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
 
-      @keyframes slideIn {
+      @keyframes popIn {
         from {
           opacity: 0;
-          transform: translateY(50px);
+          transform: scale(0.8);
         }
         to {
           opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* Header với icon */
-      .header-icon {
-        font-size: 4rem;
-        margin-bottom: 10px;
-        animation: bounce 2s infinite;
-      }
-
-      @keyframes bounce {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-10px);
+          transform: scale(1);
         }
       }
 
       h1 {
-        color: #c62828;
-        font-size: 1.8rem;
-        font-weight: 800;
-        margin-bottom: 10px;
+        color: var(--gold);
         text-transform: uppercase;
-        letter-spacing: 1px;
-        text-shadow: 2px 2px 4px rgba(198, 40, 40, 0.2);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        margin-bottom: 5px;
+        font-weight: 900;
       }
 
-      .subtitle {
-        color: #666;
-        font-size: 0.95rem;
-        margin-bottom: 25px;
+      p {
+        color: #eee;
+        margin-bottom: 20px;
         font-weight: 500;
       }
 
-      /* Input field */
+      /* Input đẹp hơn */
       input {
         width: 100%;
-        padding: 16px 20px;
-        border-radius: 15px;
-        border: 2px solid #e0e0e0;
-        margin-bottom: 20px;
-        font-size: 1rem;
+        padding: 15px;
+        border-radius: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.9);
+        font-size: 16px;
         font-weight: 600;
         text-align: center;
-        background: #f8f9fa;
-        color: #333;
-        transition: all 0.3s ease;
-        font-family: 'Inter', sans-serif;
-      }
-
-      input:focus {
+        margin-bottom: 20px;
         outline: none;
-        border-color: #ffd700;
-        background: #fff;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        transition: 0.3s;
+      }
+      input:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 15px var(--gold);
       }
 
-      /* Button chính */
-      button {
-        background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+      /* Button Gradient xịn */
+      .btn-gold {
+        background: linear-gradient(45deg, #ffd700, #ffb300);
         color: #8b0000;
         border: none;
-        padding: 16px 40px;
+        padding: 15px 40px;
         border-radius: 50px;
         font-weight: 800;
+        font-size: 1.1rem;
         cursor: pointer;
         width: 100%;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        box-shadow: 0 8px 20px rgba(255, 179, 0, 0.4);
-        position: relative;
-        overflow: hidden;
-        font-family: 'Inter', sans-serif;
       }
-
-      button::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.4);
-        transform: translate(-50%, -50%);
-        transition: width 0.6s, height 0.6s;
-      }
-
-      button:hover::before {
-        width: 300px;
-        height: 300px;
-      }
-
-      button:hover {
+      .btn-gold:hover {
         transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(255, 179, 0, 0.5);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
       }
-
-      button:active {
-        transform: translateY(-1px);
+      .btn-gold:active {
+        transform: scale(0.98);
       }
-
-      button:disabled {
-        background: linear-gradient(135deg, #bdbdbd 0%, #9e9e9e 100%);
+      .btn-gold:disabled {
+        background: #ccc;
         cursor: not-allowed;
         box-shadow: none;
-        color: #666;
       }
 
-      /* Vòng quay */
-      #wheel-container {
-        display: none;
-        margin-top: 30px;
+      /* Vòng quay wrapper */
+      .wheel-container {
+        display: none; /* Ẩn mặc định */
         position: relative;
+        margin-top: 20px;
       }
 
-      .wheel-wrap {
-        border: 12px solid #ffd700;
-        border-radius: 50%;
-        display: inline-block;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
-          0 0 0 20px rgba(255, 215, 0, 0.15);
-        background: #ffd700;
-        position: relative;
-        animation: glow 2s ease-in-out infinite;
-      }
-
-      @keyframes glow {
-        0%,
-        100% {
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
-            0 0 0 20px rgba(255, 215, 0, 0.15), 0 0 30px rgba(255, 215, 0, 0.4);
-        }
-        50% {
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
-            0 0 0 20px rgba(255, 215, 0, 0.25), 0 0 50px rgba(255, 215, 0, 0.6);
-        }
+      /* Cái kim chỉ - Tao làm đẹp hơn chút */
+      .pointer {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 50px;
+        background: #c62828;
+        clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+        z-index: 20;
+        filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5));
       }
 
       canvas {
-        display: block;
         border-radius: 50%;
-        transition: transform 8s cubic-bezier(0.2, 0, 0.1, 1);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        border: 8px solid var(--gold);
+        transition: transform 8s cubic-bezier(0.25, 0.1, 0.25, 1); /* Easing mượt */
+        width: 100%;
+        max-width: 350px;
+        height: auto;
       }
 
-      /* Kim chỉ */
-      .pointer {
-        position: absolute;
-        top: -35px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-left: 20px solid transparent;
-        border-right: 20px solid transparent;
-        border-top: 50px solid #c62828;
-        z-index: 20;
-        filter: drop-shadow(0 5px 10px rgba(198, 40, 40, 0.5));
-        animation: pointerBounce 1s ease-in-out infinite;
-      }
-
-      @keyframes pointerBounce {
-        0%,
-        100% {
-          transform: translateX(-50%) translateY(0);
-        }
-        50% {
-          transform: translateX(-50%) translateY(5px);
-        }
-      }
-
-      /* Kết quả */
-      #qr-result {
+      /* Kết quả & QR */
+      #result-screen {
         display: none;
-        margin-top: 25px;
-        animation: fadeIn 0.5s ease-in;
       }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      #congrats-text {
-        color: #c62828;
-        margin-bottom: 20px;
-        font-size: 1.2rem;
-        font-weight: 700;
-        line-height: 1.6;
-      }
-
-      #qr-code img {
-        border: 8px solid #ffd700;
-        border-radius: 20px;
+      .qr-box img {
         width: 220px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease;
+        height: 220px;
+        border-radius: 15px;
+        border: 5px solid var(--gold);
+        margin: 15px 0;
+        background: #fff;
+        padding: 5px; /* Để background trắng cho QR dễ scan */
       }
 
-      #qr-code img:hover {
-        transform: scale(1.05);
-      }
-
-      .footer-text {
+      /* Admin Section */
+      #admin-panel {
+        display: none;
+        text-align: left;
         margin-top: 20px;
-        color: #666;
-        font-weight: 600;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .admin-table th,
+      .admin-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         font-size: 0.9rem;
       }
-
-      /* Responsive cho mobile */
-      @media (max-width: 600px) {
-        .container {
-          padding: 30px 20px;
-        }
-
-        h1 {
-          font-size: 1.5rem;
-        }
-
-        .wheel-wrap {
-          transform: scale(0.8);
-        }
-
-        .decor-mai {
-          width: 250px;
-          opacity: 0.1;
-        }
+      .admin-table th {
+        background: rgba(255, 215, 0, 0.2);
+        color: var(--gold);
+      }
+      .total-row {
+        font-weight: bold;
+        color: var(--gold);
+        font-size: 1.1rem;
+        padding: 15px;
+        text-align: right;
       }
 
-      @media (max-width: 400px) {
-        .wheel-wrap {
-          transform: scale(0.65);
-        }
-
-        canvas {
-          width: 300px !important;
-          height: 300px !important;
-        }
+      /* Footer link */
+      .admin-link {
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        z-index: 100;
       }
     </style>
   </head>
   <body>
-    <!-- Particles hoa mai bay -->
-    <script src="main.js"></script>
+    <div class="overlay"></div>
+    <!-- Lớp nền tối -->
 
-    <img
-      src="https://i.imgur.com/rM7pW2k.png"
-      class="decor-mai"
-      alt="Mai Vàng"
-    />
-
-    <div class="container">
-      <div id="step-name">
-        <div class="header-icon">🧧</div>
+    <div class="glass-panel">
+      <!-- Màn hình 1: Nhập tên -->
+      <div id="step-1">
+        <div
+          style="
+            font-size: 4rem;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+          "
+        >
+          🧧
+        </div>
         <h1>Lì Xì Tết 2026</h1>
-        <p class="subtitle">Chúc mừng năm mới, vạn sự như ý!</p>
-        <input type="text" id="username" placeholder="Nhập tên của bạn..." />
-        <button onclick="startApp()">Bắt Đầu Nhận Lộc</button>
+        <p>Vòng quay nhân phẩm - Chốt đơn lì xì</p>
+        <input
+          type="text"
+          id="username"
+          placeholder="Nhập tên đại gia..."
+          autocomplete="off"
+        />
+        <button class="btn-gold" onclick="app.start()">Vào Việc Ngay</button>
       </div>
 
-      <div id="wheel-container">
-        <div class="wheel-wrap">
-          <div class="pointer"></div>
-          <canvas id="wheel" width="400" height="400"></canvas>
-        </div>
-        <button id="spin-btn" style="margin-top: 25px" onclick="spinWheel()">
-          Quay Vòng May Mắn
+      <!-- Màn hình 2: Vòng quay -->
+      <div id="step-2" class="wheel-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="400" height="400"></canvas>
+        <button
+          id="spin-btn"
+          class="btn-gold"
+          style="margin-top: 25px"
+          onclick="app.spin()"
+        >
+          Quay Tay Vận May
         </button>
       </div>
 
-      <div id="qr-result">
-        <h2 id="congrats-text"></h2>
-        <div id="qr-code"></div>
-        <p class="footer-text">Chụp màn hình và gửi cho Đạt nhé! 🎉</p>
+      <!-- Màn hình 3: Kết quả -->
+      <div id="step-3" id="result-screen" style="display: none">
+        <h2
+          id="congrats-text"
+          style="color: var(--gold); margin-bottom: 10px"
+        ></h2>
+        <div class="qr-box">
+          <!-- Thay src bằng qr.png của mày -->
+          <img
+            src="qr.png"
+            alt="QR Thanh Toán"
+            id="qr-img"
+            onerror="
+              this.src = 'https://via.placeholder.com/220x220?text=QR+IMG+Loi'
+            "
+          />
+        </div>
+        <p>Quét mã bank luôn cho nóng nhé! 🎉</p>
+        <button class="btn-gold" onclick="location.reload()">
+          Chơi lại (Chắc k ai chơi lại)
+        </button>
+      </div>
+
+      <!-- Màn hình 4: Admin (Ẩn) -->
+      <div id="admin-panel">
+        <h3
+          style="
+            color: var(--gold);
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+          "
+        >
+          Danh sách Lì Xì
+        </h3>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Tên</th>
+              <th>Tiền (VNĐ)</th>
+            </tr>
+          </thead>
+          <tbody id="admin-list"></tbody>
+        </table>
+        <div class="total-row" id="admin-total">Tổng thu: 0đ</div>
+        <button
+          style="
+            margin-top: 10px;
+            padding: 5px 15px;
+            background: #444;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          "
+          onclick="location.reload()"
+        >
+          Back
+        </button>
       </div>
     </div>
 
+    <div class="admin-link" onclick="app.openAdmin()">Admin Login</div>
+
     <script>
+      // Config MockAPI - Mày nhớ check lại xem link này sống không nhé
       const API_URL = 'https://68edcae6df2025af780116cf.mockapi.io/luckyMoney';
-      const canvas = document.getElementById('wheel');
-      const ctx = canvas.getContext('2d');
 
-      let currentUser = null;
-      let currentRotation = 0;
+      // Cấu hình vòng quay
+      const CONFIG = {
+        slices: [
+          { v: 10000, l: '10K' },
+          { v: 200000, l: '200K' },
+          { v: 10000, l: '10K' },
+          { v: 500000, l: '500K' }, // Giải to
+          { v: 20000, l: '20K' },
+          { v: 50000, l: '50K' },
+          { v: 10000, l: '10K' },
+          { v: 100000, l: '100K' },
+        ],
+        colors: ['#c62828', '#ffd700'], // Đỏ - Vàng
+        textColors: ['#fff', '#c62828'],
+      };
 
-      // Danh sách giải thưởng (10 ô)
-      const slices = [
-        { v: 10000, l: '10K' },
-        { v: 200000, l: '200K' },
-        { v: 10000, l: '10K' },
-        { v: 200000, l: '200K' },
-        { v: 10000, l: '10K' },
-        { v: 500000, l: '500K' },
-        { v: 10000, l: '10K' },
-        { v: 200000, l: '200K' },
-        { v: 100000, l: '100K' },
-        { v: 10000, l: '10K' },
-      ];
+      const app = {
+        user: null,
+        canvas: document.getElementById('wheel'),
+        ctx: document.getElementById('wheel').getContext('2d'),
+        rotation: 0,
 
-      // Vẽ vòng quay với màu đỏ vàng Tết
-      function drawWheel() {
-        const arc = (2 * Math.PI) / slices.length;
-        slices.forEach((s, i) => {
-          const angle = i * arc;
-          // Màu xen kẽ đỏ - vàng truyền thống
-          ctx.fillStyle = i % 2 === 0 ? '#c62828' : '#ffd700';
+        // Vẽ vòng quay (Code tối ưu visual)
+        drawWheel() {
+          const arc = (2 * Math.PI) / CONFIG.slices.length;
+          const ctx = this.ctx;
+
+          CONFIG.slices.forEach((item, i) => {
+            const angle = i * arc;
+
+            // Vẽ miếng pizza
+            ctx.beginPath();
+            ctx.fillStyle = CONFIG.colors[i % 2];
+            ctx.moveTo(200, 200);
+            ctx.arc(200, 200, 200, angle, angle + arc);
+            ctx.lineTo(200, 200);
+            ctx.fill();
+
+            // Vẽ text
+            ctx.save();
+            ctx.translate(200, 200);
+            ctx.rotate(angle + arc / 2);
+            ctx.textAlign = 'right';
+            ctx.fillStyle = CONFIG.textColors[i % 2];
+            ctx.font = 'bold 24px Inter';
+            ctx.fillText(item.l, 180, 8); // Đẩy text ra sát viền
+            ctx.restore();
+          });
+
+          // Vẽ tâm vòng quay (trang trí)
           ctx.beginPath();
-          ctx.moveTo(200, 200);
-          ctx.arc(200, 200, 200, angle, angle + arc);
+          ctx.arc(200, 200, 25, 0, 2 * Math.PI);
+          ctx.fillStyle = '#fff';
           ctx.fill();
-
-          // Viền trắng ngăn cách
-          ctx.strokeStyle = '#fff';
-          ctx.lineWidth = 3;
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = '#c62828';
           ctx.stroke();
 
-          // Text giải thưởng
-          ctx.save();
-          ctx.translate(200, 200);
-          ctx.rotate(angle + arc / 2);
-          ctx.fillStyle = i % 2 === 0 ? '#fff' : '#8b0000';
-          ctx.font = 'bold 20px Inter, sans-serif';
+          // Chữ giữa tâm
+          ctx.fillStyle = '#c62828';
+          ctx.font = 'bold 12px Inter';
           ctx.textAlign = 'center';
-          ctx.fillText(s.l, 100, 8);
-          ctx.restore();
-        });
+          ctx.fillText('TẾT', 200, 204);
+        },
 
-        // Tâm vòng quay
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(200, 200, 30, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.strokeStyle = '#ffd700';
-        ctx.lineWidth = 5;
-        ctx.stroke();
-      }
+        // Bước 1: Nhập tên & Init User
+        async start() {
+          const nameInput = document.getElementById('username');
+          const name = nameInput.value.trim();
 
-      // Bắt đầu app
-      async function startApp() {
-        const name = document.getElementById('username').value.trim();
-        if (!name) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Chờ đã!',
-            text: 'Bạn chưa nhập tên kìa!',
-            confirmButtonColor: '#c62828',
-          });
-          return;
-        }
+          if (!name)
+            return Swal.fire(
+              'Ê!',
+              'Không nhập tên sao biết ai lì xì?',
+              'warning',
+            );
 
-        try {
-          const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name, money: 0 }),
-          });
-          currentUser = await res.json();
-
-          document.getElementById('step-name').style.display = 'none';
-          document.getElementById('wheel-container').style.display = 'block';
-          drawWheel();
-        } catch (e) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Lỗi rồi!',
-            text: 'Không kết nối được server, thử lại nhé!',
-            confirmButtonColor: '#c62828',
-          });
-        }
-      }
-
-      // Logic quay (giữ nguyên)
-      async function spinWheel() {
-        const btn = document.getElementById('spin-btn');
-        btn.disabled = true;
-
-        // Quyết định giải thưởng trước
-        let finalMoney;
-        const rand = Math.random() * 100;
-        if (rand < 95) finalMoney = 200000; // 95% ra 200k
-        else if (rand < 98) finalMoney = 500000; // 3% ra 500k
-        else if (rand < 99) finalMoney = 100000; // 1% ra 100k
-        else finalMoney = 10000; // 1% ra 10k
-
-        // Tìm ô có giá trị này
-        const matchedIndices = slices
-          .map((s, i) => (s.v === finalMoney ? i : -1))
-          .filter((i) => i !== -1);
-        const targetIndex =
-          matchedIndices[Math.floor(Math.random() * matchedIndices.length)];
-
-        // Tính góc quay để kim chỉ đúng
-        const sliceDeg = 360 / slices.length;
-        const extraDeg = 8 * 360; // Quay 8 vòng
-        const stopDeg = 270 - targetIndex * sliceDeg - sliceDeg / 2;
-
-        currentRotation +=
-          extraDeg + ((stopDeg - (currentRotation % 360) + 360) % 360);
-        canvas.style.transform = `rotate(${currentRotation}deg)`;
-
-        // Chờ 11s (8s quay + 3s dừng)
-        setTimeout(async () => {
-          // Update API
-          await fetch(`${API_URL}/${currentUser.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ money: finalMoney }),
-          });
-
-          // Hiệu ứng pháo hoa vàng đỏ
-          confetti({
-            particleCount: 200,
-            spread: 100,
-            origin: { y: 0.6 },
-            colors: ['#c62828', '#ffd700', '#ffb300'],
-          });
-
-          setTimeout(() => {
-            confetti({
-              particleCount: 150,
-              spread: 80,
-              origin: { y: 0.7 },
-              colors: ['#c62828', '#ffd700'],
+          try {
+            // Tạo user trên API
+            const res = await fetch(API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: name,
+                money: 0,
+                date: new Date().toISOString(),
+              }),
             });
-          }, 300);
+            this.user = await res.json();
 
-          // Hiện kết quả
-          document.getElementById('wheel-container').style.display = 'none';
-          document.getElementById('qr-result').style.display = 'block';
-          document.getElementById('congrats-text').innerHTML = `Chúc mừng <b>${
-            currentUser.name
-          }</b>!<br/>Bạn đã lì xì cho Đạt <b>${finalMoney.toLocaleString()}đ</b> 🎊`;
+            // Chuyển màn hình
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'block';
+            this.drawWheel();
+          } catch (e) {
+            Swal.fire(
+              'Lỗi mạng',
+              'API chết rồi hoặc mạng lag. F5 lại đi.',
+              'error',
+            );
+          }
+        },
 
-          // Gen QR code
-          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=Dat_Lixi_${finalMoney}_tu_${currentUser.name}`;
-          document.getElementById(
-            'qr-code',
-          ).innerHTML = `<img src="${qrUrl}" alt="QR Code"/>`;
+        // Bước 2: Quay
+        async spin() {
+          const btn = document.getElementById('spin-btn');
+          btn.disabled = true;
+          btn.innerText = 'Đang quay...';
 
-          Swal.fire({
-            icon: 'success',
-            title: 'Hoàn thành!',
-            html: `Cảm ơn bạn đã lì xì cho Đạt <b>${finalMoney.toLocaleString()}đ</b>!<br/>Chúc bạn năm mới an khang thịnh vượng! 🧧`,
-            confirmButtonText: 'Đóng',
+          // Logic Random (Tỉ lệ ra tiền to thấp thôi nhé)
+          // 70% ra 10k/20k, 25% ra 50k/100k, 5% ra 200k/500k
+          const rand = Math.random();
+          let prizeMoney;
+
+          if (rand < 0.7)
+            prizeMoney = [10000, 20000][Math.floor(Math.random() * 2)];
+          else if (rand < 0.95)
+            prizeMoney = [50000, 100000][Math.floor(Math.random() * 2)];
+          else prizeMoney = [200000, 500000][Math.floor(Math.random() * 2)];
+
+          // Tìm vị trí ô có giá trị prizeMoney
+          // Lọc ra các index có giá trị trùng khớp
+          const possibleIndices = CONFIG.slices
+            .map((s, i) => (s.v === prizeMoney ? i : -1))
+            .filter((i) => i !== -1);
+
+          // Chọn ngẫu nhiên 1 ô trong các ô trùng khớp
+          const targetIndex =
+            possibleIndices[Math.floor(Math.random() * possibleIndices.length)];
+
+          // Tính toán góc quay
+          const sliceDeg = 360 / CONFIG.slices.length;
+          // Quay ít nhất 5 vòng (1800 độ) + góc tới ô đích
+          // Offset thêm 1 chút để kim chỉ vào giữa ô (sliceDeg / 2)
+          // Trừ đi vì canvas quay theo chiều kim đồng hồ, hệ tọa độ ngược
+          const stopAngle =
+            360 * 8 + (360 - targetIndex * sliceDeg - sliceDeg / 2);
+
+          // Cộng dồn vào góc quay hiện tại để quay tiếp chứ ko reset
+          this.rotation += stopAngle;
+          this.canvas.style.transform = `rotate(${this.rotation}deg)`;
+
+          // Hết thời gian quay (8s khớp css transition)
+          setTimeout(async () => {
+            await this.finishSpin(prizeMoney);
+          }, 8000);
+        },
+
+        // Bước 3: Xử lý kết quả
+        async finishSpin(money) {
+          // Update tiền lên server
+          try {
+            await fetch(`${API_URL}/${this.user.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ money: money }),
+            });
+          } catch (e) {
+            console.error('Lỗi save tiền', e);
+          }
+
+          // Hiệu ứng pháo hoa
+          confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#ffd700', '#c62828'],
+          });
+
+          // Show kết quả
+          document.getElementById('step-2').style.display = 'none';
+          document.getElementById('step-3').style.display = 'block';
+
+          document.getElementById('congrats-text').innerHTML =
+            `Chúc mừng <b>${this.user.name}</b><br>Đã trúng kèo lì xì: <span style="font-size: 1.5em">${money.toLocaleString()}đ</span>`;
+        },
+
+        // ADMIN: Login & View Data
+        async openAdmin() {
+          const { value: password } = await Swal.fire({
+            title: 'Admin Access',
+            input: 'password',
+            inputPlaceholder: 'Nhập mật khẩu (1234)',
+            background: '#fff',
             confirmButtonColor: '#c62828',
           });
-        }, 11000);
-      }
+
+          if (password === '1234') {
+            // Hide tất cả, hiện admin panel
+            document
+              .querySelectorAll('.glass-panel > div')
+              .forEach((d) => (d.style.display = 'none'));
+            document.getElementById('admin-panel').style.display = 'block';
+            this.loadAdminData();
+          } else if (password) {
+            Swal.fire('Sai pass!', 'Đừng hack nữa bạn ơi.', 'error');
+          }
+        },
+
+        async loadAdminData() {
+          const tbody = document.getElementById('admin-list');
+          const totalEl = document.getElementById('admin-total');
+          tbody.innerHTML = '<tr><td colspan="2">Đang tải...</td></tr>';
+
+          try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+
+            // Filter user rác (chưa quay) nếu muốn, ở đây tao lấy hết
+            // Sắp xếp người mới nhất lên đầu
+            const validData = data.sort((a, b) => b.id - a.id);
+
+            let total = 0;
+            let html = '';
+
+            validData.forEach((u) => {
+              const m = parseInt(u.money) || 0;
+              total += m;
+              html += `
+                            <tr>
+                                <td>${u.name} <small style="color:#aaa">(${u.id})</small></td>
+                                <td style="color: var(--gold); font-weight:bold">${m.toLocaleString()}đ</td>
+                            </tr>
+                        `;
+            });
+
+            tbody.innerHTML =
+              html || '<tr><td colspan="2">Chưa ai chơi cả :(</td></tr>';
+            totalEl.innerHTML = `Tổng thu: ${total.toLocaleString()} VNĐ`;
+          } catch (e) {
+            tbody.innerHTML = '<tr><td colspan="2">Lỗi tải dữ liệu</td></tr>';
+          }
+        },
+      };
     </script>
   </body>
 </html>
