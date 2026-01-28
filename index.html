@@ -4,20 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tết 2026 - Lì Xì Cho Đạt</title>
-    <!-- Font ngon lành -->
+    <!-- Font -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
-    <!-- Libs cũ giữ nguyên -->
+    <!-- Libs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
       :root {
-        --primary: #c62828; /* Đỏ */
-        --gold: #ffd700; /* Vàng */
-        --glass: rgba(255, 255, 255, 0.15); /* Màu kính trong suốt */
+        --primary: #c62828;
+        --gold: #ffd700;
+        --glass: rgba(255, 255, 255, 0.15);
         --glass-border: rgba(255, 255, 255, 0.3);
       }
 
@@ -29,36 +29,45 @@
       }
 
       body {
-        /* Thay cái url này bằng đường dẫn file img1.png (gif) của mày */
-        background: url('images/img1.png') no-repeat center center fixed;
-        background-size: cover;
-        /* Fallback nếu ảnh lỗi thì hiện gradient */
-        background-color: #8b0000;
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow-x: hidden;
+        overflow: hidden;
         color: #fff;
+        position: relative;
       }
 
-      /* Lớp phủ tối màu để text dễ đọc hơn trên nền gif động */
+      /* --- VIDEO BACKGROUND --- */
+      #bg-video {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -2; /* Nằm dưới cùng */
+        object-fit: cover;
+      }
+
+      /* Lớp phủ tối */
       .overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.3);
-        z-index: 0;
+        background: rgba(0, 0, 0, 0.4); /* Tối hơn chút cho video đỡ loè loẹt */
+        z-index: -1;
       }
 
-      /* Container chính hiệu ứng kính mờ (Glassmorphism) */
+      /* Panel Kính */
       .glass-panel {
         position: relative;
         z-index: 10;
         background: var(--glass);
-        backdrop-filter: blur(12px); /* Làm mờ nền sau lưng */
+        backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 2px solid var(--glass-border);
         border-radius: 24px;
@@ -95,7 +104,6 @@
         font-weight: 500;
       }
 
-      /* Input đẹp hơn */
       input {
         width: 100%;
         padding: 15px;
@@ -114,7 +122,6 @@
         box-shadow: 0 0 15px var(--gold);
       }
 
-      /* Button Gradient xịn */
       .btn-gold {
         background: linear-gradient(45deg, #ffd700, #ffb300);
         color: #8b0000;
@@ -135,23 +142,17 @@
         transform: translateY(-3px);
         box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
       }
-      .btn-gold:active {
-        transform: scale(0.98);
-      }
       .btn-gold:disabled {
         background: #ccc;
         cursor: not-allowed;
-        box-shadow: none;
       }
 
-      /* Vòng quay wrapper */
       .wheel-container {
-        display: none; /* Ẩn mặc định */
+        display: none;
         position: relative;
         margin-top: 20px;
       }
 
-      /* Cái kim chỉ - Tao làm đẹp hơn chút */
       .pointer {
         position: absolute;
         top: -25px;
@@ -169,13 +170,12 @@
         border-radius: 50%;
         box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         border: 8px solid var(--gold);
-        transition: transform 8s cubic-bezier(0.25, 0.1, 0.25, 1); /* Easing mượt */
+        transition: transform 8s cubic-bezier(0.25, 0.1, 0.25, 1);
         width: 100%;
         max-width: 350px;
         height: auto;
       }
 
-      /* Kết quả & QR */
       #result-screen {
         display: none;
       }
@@ -186,10 +186,9 @@
         border: 5px solid var(--gold);
         margin: 15px 0;
         background: #fff;
-        padding: 5px; /* Để background trắng cho QR dễ scan */
+        padding: 5px;
       }
 
-      /* Admin Section */
       #admin-panel {
         display: none;
         text-align: left;
@@ -224,7 +223,6 @@
         text-align: right;
       }
 
-      /* Footer link */
       .admin-link {
         position: absolute;
         bottom: 10px;
@@ -237,13 +235,34 @@
     </style>
   </head>
   <body>
+    <!-- 
+      VIDEO BACKGROUND
+      Mày thay src="video.mp4" bằng file video của mày nhé. 
+      Thuộc tính: autoplay (tự chạy), muted (tắt tiếng video để ko đấm nhau với nhạc nền), loop (lặp lại)
+    -->
+    <video autoplay muted loop playsinline id="bg-video">
+      <source
+        src="https://joy1.videvo.net/videvo_files/converted/2017_12/preview/171124_H1_006.mp4"
+        type="video/mp4"
+      />
+    </video>
+
+    <!-- 
+      AUDIO NHẠC TẾT
+      Thay src="nhac-tet.mp3" bằng link nhạc của mày
+    -->
+    <audio id="bg-music" loop>
+      <source
+        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+
     <div class="overlay"></div>
-    <!-- Lớp nền tối -->
 
     <div class="glass-panel">
-      <!-- Màn hình 1: Nhập tên -->
+      <!-- Màn hình 1 -->
       <div id="step-1">
-        <!-- Đã xóa icon bao lì xì theo yêu cầu -->
         <h1>Lì Xì Tết 2026</h1>
         <p>Vòng quay nhân phẩm - Lì xì cho Đạt nha!</p>
         <input
@@ -255,7 +274,7 @@
         <button class="btn-gold" onclick="app.start()">Vào Việc Ngay</button>
       </div>
 
-      <!-- Màn hình 2: Vòng quay -->
+      <!-- Màn hình 2 -->
       <div id="step-2" class="wheel-container">
         <div class="pointer"></div>
         <canvas id="wheel" width="400" height="400"></canvas>
@@ -269,14 +288,13 @@
         </button>
       </div>
 
-      <!-- Màn hình 3: Kết quả -->
+      <!-- Màn hình 3 -->
       <div id="step-3" id="result-screen" style="display: none">
         <h2
           id="congrats-text"
           style="color: var(--gold); margin-bottom: 10px"
         ></h2>
         <div class="qr-box">
-          <!-- Thay src bằng qr.png của mày -->
           <img
             src="images/qr.png"
             alt="QR Thanh Toán"
@@ -292,7 +310,7 @@
         </button>
       </div>
 
-      <!-- Màn hình 4: Admin (Ẩn) -->
+      <!-- Admin Panel -->
       <div id="admin-panel">
         <h3
           style="
@@ -333,24 +351,22 @@
     <div class="admin-link" onclick="app.openAdmin()">Admin Login</div>
 
     <script>
-      // Config MockAPI - Mày nhớ check lại xem link này sống không nhé
       const API_URL = 'https://68edcae6df2025af780116cf.mockapi.io/luckyMoney';
 
-      // Cấu hình vòng quay (Giữ nguyên 10 ô như code gốc của mày)
       const CONFIG = {
         slices: [
-          { v: 10000, l: '10K' },
-          { v: 200000, l: '200K' },
-          { v: 10000, l: '10K' },
-          { v: 200000, l: '200K' },
-          { v: 10000, l: '10K' },
-          { v: 500000, l: '500K' }, // Giải đặc biệt
-          { v: 10000, l: '10K' },
-          { v: 200000, l: '200K' },
-          { v: 100000, l: '100K' },
-          { v: 10000, l: '10K' },
+          { v: 10000, l: '10K' }, // 0
+          { v: 200000, l: '200K' }, // 1
+          { v: 10000, l: '10K' }, // 2
+          { v: 200000, l: '200K' }, // 3
+          { v: 10000, l: '10K' }, // 4
+          { v: 500000, l: '500K' }, // 5 (Giải to)
+          { v: 10000, l: '10K' }, // 6
+          { v: 200000, l: '200K' }, // 7
+          { v: 100000, l: '100K' }, // 8
+          { v: 10000, l: '10K' }, // 9
         ],
-        colors: ['#c62828', '#ffd700'], // Đỏ - Vàng
+        colors: ['#c62828', '#ffd700'],
         textColors: ['#fff', '#c62828'],
       };
 
@@ -359,16 +375,22 @@
         canvas: document.getElementById('wheel'),
         ctx: document.getElementById('wheel').getContext('2d'),
         rotation: 0,
+        audio: document.getElementById('bg-music'),
 
-        // Vẽ vòng quay (Code tối ưu visual)
+        // Init: Cố gắng phát nhạc khi load
+        init() {
+          // Cái này hên xui tùy trình duyệt
+          this.audio.volume = 0.5;
+          this.audio.play().catch(() => {
+            console.log('Chặn autoplay rồi, chờ user click thôi');
+          });
+        },
+
         drawWheel() {
           const arc = (2 * Math.PI) / CONFIG.slices.length;
           const ctx = this.ctx;
-
           CONFIG.slices.forEach((item, i) => {
             const angle = i * arc;
-
-            // Vẽ miếng pizza
             ctx.beginPath();
             ctx.fillStyle = CONFIG.colors[i % 2];
             ctx.moveTo(200, 200);
@@ -376,18 +398,16 @@
             ctx.lineTo(200, 200);
             ctx.fill();
 
-            // Vẽ text
             ctx.save();
             ctx.translate(200, 200);
             ctx.rotate(angle + arc / 2);
             ctx.textAlign = 'right';
             ctx.fillStyle = CONFIG.textColors[i % 2];
             ctx.font = 'bold 24px Inter';
-            ctx.fillText(item.l, 180, 8); // Đẩy text ra sát viền
+            ctx.fillText(item.l, 180, 8);
             ctx.restore();
           });
 
-          // Vẽ tâm vòng quay (trang trí)
           ctx.beginPath();
           ctx.arc(200, 200, 25, 0, 2 * Math.PI);
           ctx.fillStyle = '#fff';
@@ -396,17 +416,18 @@
           ctx.strokeStyle = '#c62828';
           ctx.stroke();
 
-          // Chữ giữa tâm
           ctx.fillStyle = '#c62828';
           ctx.font = 'bold 12px Inter';
           ctx.textAlign = 'center';
           ctx.fillText('TẾT', 200, 204);
         },
 
-        // Bước 1: Nhập tên & Init User
         async start() {
           const nameInput = document.getElementById('username');
           const name = nameInput.value.trim();
+
+          // Kích hoạt nhạc ngay khi user click nút này (Bypass Autoplay Policy)
+          this.audio.play().catch((e) => console.log(e));
 
           if (!name)
             return Swal.fire(
@@ -416,7 +437,6 @@
             );
 
           try {
-            // Tạo user trên API
             const res = await fetch(API_URL, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -428,78 +448,67 @@
             });
             this.user = await res.json();
 
-            // Chuyển màn hình
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
             this.drawWheel();
           } catch (e) {
-            Swal.fire(
-              'Lỗi mạng',
-              'API chết rồi hoặc mạng lag. F5 lại đi.',
-              'error',
-            );
+            Swal.fire('Lỗi mạng', 'Check lại API đi bạn êi.', 'error');
           }
         },
 
-        // Bước 2: Quay
         async spin() {
           const btn = document.getElementById('spin-btn');
           btn.disabled = true;
           btn.innerText = 'Đang quay...';
 
-          // Logic Random "hút máu" của mày đây
+          // --- CHEAT MODE: 60 - 33 - 6 - 1 ---
           let finalMoney;
           const rand = Math.random() * 100;
 
-          // Tỉ lệ ép người chơi phải lì xì to
-          if (rand < 95)
-            finalMoney = 200000; // 95% ra 200k
-          else if (rand < 98)
-            finalMoney = 500000; // 3% ra 500k
+          if (rand < 60)
+            finalMoney = 200000; // 60%
+          else if (rand < 93)
+            finalMoney = 500000; // 33%
           else if (rand < 99)
-            finalMoney = 100000; // 1% ra 100k
-          else finalMoney = 10000; // 1% ra 10k (nhân phẩm cao lắm mới né được)
+            finalMoney = 100000; // 6%
+          else finalMoney = 10000; // 1%
 
-          // Tìm vị trí ô có giá trị finalMoney
-          // Lọc ra các index có giá trị trùng khớp
+          // Logic tìm góc quay
           const possibleIndices = CONFIG.slices
             .map((s, i) => (s.v === finalMoney ? i : -1))
             .filter((i) => i !== -1);
-
-          // Chọn ngẫu nhiên 1 ô trong các ô trùng khớp
           const targetIndex =
             possibleIndices[Math.floor(Math.random() * possibleIndices.length)];
 
-          // Tính toán góc quay
+          // Tính toán rotation (Gốc 270 độ là 12h)
           const sliceDeg = 360 / CONFIG.slices.length;
-          // Quay ít nhất 5 vòng (1800 độ) + góc tới ô đích
-          const stopAngle =
-            360 * 8 + (360 - targetIndex * sliceDeg - sliceDeg / 2);
+          const targetSliceCenter = targetIndex * sliceDeg + sliceDeg / 2;
+          let rotateAngle = 270 - targetSliceCenter;
+          while (rotateAngle < 0) rotateAngle += 360;
 
-          // Cộng dồn vào góc quay hiện tại
-          this.rotation += stopAngle;
+          // Quay tối thiểu 8 vòng
+          const extraSpins = 360 * 8;
+          const currentMod = this.rotation % 360;
+          let distance = rotateAngle - currentMod;
+          if (distance < 0) distance += 360;
+
+          this.rotation += distance + extraSpins;
           this.canvas.style.transform = `rotate(${this.rotation}deg)`;
 
-          // Hết thời gian quay (8s khớp css transition)
           setTimeout(async () => {
             await this.finishSpin(finalMoney);
           }, 8000);
         },
 
-        // Bước 3: Xử lý kết quả
         async finishSpin(money) {
-          // Update tiền lên server
           try {
             await fetch(`${API_URL}/${this.user.id}`, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ money: money }),
             });
-          } catch (e) {
-            console.error('Lỗi save tiền', e);
-          }
+          } catch (e) {}
 
-          // Hiệu ứng pháo hoa
           confetti({
             particleCount: 150,
             spread: 70,
@@ -507,22 +516,18 @@
             colors: ['#ffd700', '#c62828'],
           });
 
-          // Show kết quả
           document.getElementById('step-2').style.display = 'none';
           document.getElementById('step-3').style.display = 'block';
 
-          // Text đúng ý: "Bạn đã lì xì cho Đạt..."
           document.getElementById('congrats-text').innerHTML =
             `Chúc mừng <b>${this.user.name}</b>!<br/>Bạn đã lì xì cho Đạt <b>${money.toLocaleString()}đ</b> 🎊`;
 
-          // Gen lại QR code với số tiền và lời nhắn
+          // Cập nhật QR Code (API)
+          // Link này sẽ tạo QR chứa nội dung chuyển khoản
           const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=Dat_Lixi_${money}_tu_${this.user.name}`;
-          const qrImg = document.getElementById('qr-img');
-          // Nếu mày muốn dùng api tạo QR động thì dùng dòng dưới, còn dùng ảnh tĩnh qr.png thì kệ nó
-          // qrImg.src = qrUrl;
+          // document.getElementById('qr-img').src = qrUrl; // Uncomment nếu muốn QR động
         },
 
-        // ADMIN: Login & View Data
         async openAdmin() {
           const { value: password } = await Swal.fire({
             title: 'Admin Access',
@@ -533,7 +538,6 @@
           });
 
           if (password === '1234') {
-            // Hide tất cả, hiện admin panel
             document
               .querySelectorAll('.glass-panel > div')
               .forEach((d) => (d.style.display = 'none'));
@@ -552,23 +556,14 @@
           try {
             const res = await fetch(API_URL);
             const data = await res.json();
-
-            // Filter user rác (chưa quay) nếu muốn, ở đây tao lấy hết
-            // Sắp xếp người mới nhất lên đầu
             const validData = data.sort((a, b) => b.id - a.id);
-
             let total = 0;
             let html = '';
 
             validData.forEach((u) => {
               const m = parseInt(u.money) || 0;
               total += m;
-              html += `
-                            <tr>
-                                <td>${u.name} <small style="color:#aaa">(${u.id})</small></td>
-                                <td style="color: var(--gold); font-weight:bold">${m.toLocaleString()}đ</td>
-                            </tr>
-                        `;
+              html += `<tr><td>${u.name}</td><td style="color: var(--gold); font-weight:bold">${m.toLocaleString()}đ</td></tr>`;
             });
 
             tbody.innerHTML =
@@ -579,6 +574,9 @@
           }
         },
       };
+
+      // Chạy thử autoplay khi load trang
+      window.onload = () => app.init();
     </script>
   </body>
 </html>
