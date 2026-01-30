@@ -26,11 +26,25 @@ const app = {
 
   // Init: Cố gắng phát nhạc khi load
   init() {
-    // Cái này hên xui tùy trình duyệt
-    this.audio.volume = 0.5;
-    this.audio.play().catch(() => {
-      console.log('Chặn autoplay rồi, chờ user click thôi');
-    });
+    this.canvas = document.getElementById('wheel');
+    this.ctx = this.canvas.getContext('2d');
+
+    this.audio.volume = 0.6;
+
+    // --- HACK AUTOPLAY ---
+    // Tạo hàm kích hoạt nhạc
+    const enableAudio = () => {
+      this.audio.play().catch(() => {}); // Kệ mẹ lỗi nếu có
+      // Chạy xong 1 lần thì gỡ event ra ngay cho đỡ rác bộ nhớ
+      document.removeEventListener('click', enableAudio);
+      document.removeEventListener('touchstart', enableAudio);
+      document.removeEventListener('keydown', enableAudio);
+    };
+
+    // Bắt dính mọi thao tác của user (chuột, chạm màn hình, gõ phím)
+    document.addEventListener('click', enableAudio);
+    document.addEventListener('touchstart', enableAudio); // Cho điện thoại
+    document.addEventListener('keydown', enableAudio);
   },
 
   drawWheel() {
