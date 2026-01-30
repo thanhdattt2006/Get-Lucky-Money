@@ -9,6 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="style.css" />
     <!-- Libs -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -20,10 +21,7 @@
       Thuộc tính: autoplay (tự chạy), muted (tắt tiếng video để ko đấm nhau với nhạc nền), loop (lặp lại)
     -->
     <video autoplay muted loop playsinline id="bg-video">
-      <source
-        src="https://joy1.videvo.net/videvo_files/converted/2017_12/preview/171124_H1_006.mp4"
-        type="video/mp4"
-      />
+      <source src="resources/loop.mp4" type="video/mp4" />
     </video>
 
     <!-- 
@@ -31,10 +29,7 @@
       Thay src="nhac-tet.mp3" bằng link nhạc của mày
     -->
     <audio id="bg-music" loop>
-      <source
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-        type="audio/mpeg"
-      />
+      <source src="resources/song.mp3" type="audio/mpeg" />
     </audio>
 
     <div class="overlay"></div>
@@ -74,14 +69,7 @@
           style="color: var(--gold); margin-bottom: 10px"
         ></h2>
         <div class="qr-box">
-          <img
-            src="images/qr.png"
-            alt="QR Thanh Toán"
-            id="qr-img"
-            onerror="
-              this.src = 'https://via.placeholder.com/220x220?text=QR+IMG+Loi'
-            "
-          />
+          <img src="resources/qr.png" alt="QR Thanh Toán" id="qr-img" />
         </div>
         <p>Quét mã bank luôn cho nóng nhé! 🎉</p>
         <button class="btn-gold" onclick="location.reload()">
@@ -128,5 +116,6 @@
     </div>
 
     <div class="admin-link" onclick="app.openAdmin()">Admin Login</div>
+    <script src="main.js"></script>
   </body>
 </html>
