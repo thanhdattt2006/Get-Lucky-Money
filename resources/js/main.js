@@ -28,19 +28,39 @@ const app = {
   init() {
     this.canvas = document.getElementById('wheel');
     this.ctx = this.canvas.getContext('2d');
-    this.audio.volume = 0.36;
 
-    // Hack Autoplay
-    const enableAudio = () => {
-      if (!this.isMuted) this.audio.play().catch(() => {});
-      document.removeEventListener('click', enableAudio);
-      document.removeEventListener('touchstart', enableAudio);
-      document.removeEventListener('keydown', enableAudio);
+    // Set volume vừa phải
+    this.audio.volume = 0.6;
+
+    // --- CHIÊU TỐI ƯU: KÍCH HOẠT NHẠC KHI NHẬP TÊN ---
+    const input = document.getElementById('username');
+
+    // Hàm này chỉ chạy đúng 1 lần duy nhất rồi tự hủy
+    const playMusicOnce = () => {
+      if (!this.isMuted) {
+        // Play ngay lập tức khi user chạm vào ô input
+        this.audio
+          .play()
+          .then(() => {
+            console.log('Nhạc đã lên nhờ sự kiện focus!');
+          })
+          .catch((e) => {
+            console.log('Vẫn bị chặn, chờ click nút vậy');
+          });
+      }
+
+      // Xóa sự kiện đi để không gọi lại nhiều lần
+      input.removeEventListener('focus', playMusicOnce);
+      input.removeEventListener('click', playMusicOnce);
+      document.removeEventListener('click', playMusicOnce);
     };
 
-    document.addEventListener('click', enableAudio);
-    document.addEventListener('touchstart', enableAudio);
-    document.addEventListener('keydown', enableAudio);
+    // Bắt sự kiện chạm vào ô input (Mobile & Desktop đều dính)
+    input.addEventListener('focus', playMusicOnce);
+    input.addEventListener('click', playMusicOnce);
+
+    // Backup: Nếu nó không nhập tên mà bấm lung tung, cũng thử play luôn
+    document.addEventListener('click', playMusicOnce, { once: true });
   },
 
   // Chức năng bật tắt nhạc
