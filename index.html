@@ -4,38 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tết 2026 - Lì Xì Cho Đạt</title>
-    <!-- Font -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
-    <!-- Libs -->
+    <link rel="stylesheet" href="resources/css/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   </head>
   <body>
-    <!-- 
-      VIDEO BACKGROUND
-      Mày thay src="video.mp4" bằng file video của mày nhé. 
-      Thuộc tính: autoplay (tự chạy), muted (tắt tiếng video để ko đấm nhau với nhạc nền), loop (lặp lại)
-    -->
     <video autoplay muted loop playsinline id="bg-video">
       <source src="resources/loop.mp4" type="video/mp4" />
     </video>
 
-    <!-- 
-      AUDIO NHẠC TẾT
-      Thay src="nhac-tet.mp3" bằng link nhạc của mày
-    -->
     <audio id="bg-music" loop>
       <source src="resources/song.mp3" type="audio/mpeg" />
     </audio>
 
+    <div class="music-control" onclick="app.toggleMusic()">
+      <span id="music-icon">🔊</span>
+    </div>
+
     <div class="overlay"></div>
 
     <div class="glass-panel">
-      <!-- Màn hình 1 -->
       <div id="step-1">
         <h1>Lì Xì Tết 2026</h1>
         <p>Cho Đạt gửi lời chào năm mới đến mọi người!</p>
@@ -48,7 +39,6 @@
         <button class="btn-gold" onclick="app.start()">Vào Lì Xì</button>
       </div>
 
-      <!-- Màn hình 2 -->
       <div id="step-2" class="wheel-container">
         <div class="pointer"></div>
         <canvas id="wheel" width="400" height="400"></canvas>
@@ -62,8 +52,7 @@
         </button>
       </div>
 
-      <!-- Màn hình 3 -->
-      <div id="step-3" id="result-screen" style="display: none">
+      <div id="step-3" style="display: none">
         <h2
           id="congrats-text"
           style="color: var(--gold); margin-bottom: 10px"
@@ -74,46 +63,8 @@
         <p>Anh/chị vui lòng chuyển khoản để lì xì cho Đạt nha🙏</p>
         <button class="btn-gold" onclick="location.reload()">Quay lại</button>
       </div>
-
-      <!-- Admin Panel -->
-      <div id="admin-panel">
-        <h3
-          style="
-            color: var(--gold);
-            border-bottom: 1px solid #555;
-            padding-bottom: 5px;
-          "
-        >
-          Danh sách người Lì Xì
-        </h3>
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Tên</th>
-              <th>Tiền (VNĐ)</th>
-            </tr>
-          </thead>
-          <tbody id="admin-list"></tbody>
-        </table>
-        <div class="total-row" id="admin-total">Tổng thu: 0đ</div>
-        <button
-          style="
-            margin-top: 10px;
-            padding: 5px 15px;
-            background: #444;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-          "
-          onclick="location.reload()"
-        >
-          Back
-        </button>
-      </div>
     </div>
 
-    <div class="admin-link" onclick="app.openAdmin()">Admin Login</div>
-    <script src="main.js"></script>
+    <script src="resources/js/main.js"></script>
   </body>
 </html>

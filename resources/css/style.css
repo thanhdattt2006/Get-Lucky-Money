@@ -216,3 +216,63 @@ canvas {
   cursor: pointer;
   z-index: 100;
 }
+
+.music-control {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  font-size: 20px;
+  transition: 0.3s;
+}
+.music-control:hover {
+  background: var(--gold);
+  color: #8b0000;
+}
+
+/* Style cho Admin (Filter & Delete) */
+.admin-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filter-select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--gold);
+  background: #333;
+  color: #fff;
+  flex: 1;
+}
+
+.btn-delete-all {
+  background: #c62828;
+  color: #fff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-delete-one {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 10px;
+}

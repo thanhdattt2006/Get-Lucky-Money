@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Dashboard // Tokyo Night</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="resources/css/admin.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="brand">LIXI_DAT<span>_ADMIN</span></div>
+        <button class="btn-back" onclick="window.location.href = 'index.html'">
+          EXIT SYSTEM
+        </button>
+      </header>
+
+      <div class="toolbar">
+        <div class="select-wrapper">
+          <select id="filter-money" onchange="adminApp.filterData()">
+            <option value="all">FILTER: ALL TRANSACTIONS</option>
+            <option value="10000">FILTER: 10,000 VND</option>
+            <option value="100000">FILTER: 100,000 VND</option>
+            <option value="200000">FILTER: 200,000 VND</option>
+            <option value="500000">FILTER: 500,000 VND</option>
+          </select>
+        </div>
+        <button class="btn-destroy" onclick="adminApp.deleteAll()">
+          DELETE ALL DATA
+        </button>
+      </div>
+
+      <div class="data-container">
+        <table id="data-table">
+          <thead>
+            <tr>
+              <th width="10%">ID</th>
+              <th width="35%">USER</th>
+              <th width="30%">AMOUNT</th>
+              <th width="25%">ACTION</th>
+            </tr>
+          </thead>
+          <tbody id="admin-list"></tbody>
+        </table>
+      </div>
+
+      <footer class="app-footer">
+        <span class="total-label">REVENUE:</span>
+        <span class="total-value" id="admin-total">0 VND</span>
+      </footer>
+    </div>
+
+    <script src="resources/js/admin.js"></script>
+  </body>
+</html>
