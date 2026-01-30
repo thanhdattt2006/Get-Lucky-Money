@@ -177,7 +177,7 @@ const app = {
     document.getElementById('step-3').style.display = 'block';
 
     document.getElementById('congrats-text').innerHTML =
-      `Chúc mừng <b>${this.user.name}</b>!<br/>Bạn đã lì xì cho Đạt <b>${money.toLocaleString()}đ</b> 🎊`;
+      `Em Đạt cảm ơn anh/chị <b>${this.user.name}</b> đã lì xì!<br/>Năm mới Đạt chúc anh/chị sức khoẻ dồi dào, tiền vào như nước🙏<b><br/>Tiền lì xì cho Đạt: ${money.toLocaleString()}đ</b>`;
 
     // Cập nhật QR Code (API)
     // Link này sẽ tạo QR chứa nội dung chuyển khoản
