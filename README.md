@@ -36,7 +36,32 @@ The application is divided into two main modules:
 - **Libraries:**
   - SweetAlert2 (Modal and Popup interface).
 - **Version Control:** Git & GitHub.
+- # **Deployment:** GitHub Pages.
+- **Interactive Wheel:** Built using the Canvas API with physics-based rotation logic and randomized outcome algorithms.
+- **Audio Management:** Implements advanced logic to handle browser Autoplay Policies. Audio is programmatically triggered via user gestures (input focus or button click) to ensure consistent playback on mobile devices (iOS/Android).
+- **Dynamic QR Generation:** Integration with QR Server API to generate payment codes based on the specific spun amount.
+- **Responsive Design:** Optimized for various viewports, ensuring functionality across desktop and mobile browsers.
+- **Open Graph Integration:** Full metadata configuration for rich link previews on social platforms (Facebook, Messenger, Zalo).
+
+### Administrator Dashboard
+
+- **Security:** Simple authentication mechanism to protect sensitive data.
+- **UI/UX:** Custom "Tokyo Night" design system, featuring a dark mode interface with high contrast for readability.
+- **Data Management:**
+  - Asynchronous data fetching from MockAPI.
+  - Sorting and filtering capabilities by donation amount.
+  - Individual record deletion.
+  - Bulk deletion utility (Wipe All Data) with Promise.all for concurrent request handling.
+
+## Technology Stack
+
+- **Frontend:** HTML5, CSS3 (Custom Properties), JavaScript (ES6+).
+- **Backend Service:** MockAPI.io (RESTful API).
+- **Libraries:**
+  - SweetAlert2 (Modal and Popup interface).
+- **Version Control:** Git & GitHub.
 - **Deployment:** GitHub Pages.
+  > > > > > > > 629e4bd56f22099dfb3602f86293a9d48a2182ec
 
 ## Project Structure
 
@@ -88,9 +113,10 @@ Go to Settings > Pages.
 
 Select the main branch as the source.
 
-Ensure thumbnail.png is accessible for Open Graph tags to function correctly.
+Ensure thumbnail.png is accessible via the correct path (resources/thumbnail.png) for Open Graph tags to function correctly.
+>>>>>>> 629e4bd56f22099dfb3602f86293a9d48a2182ec
 
 Author
-Thanh Dat (Dave)
-Backend Developer transitioning to Full-stack.
+Thành Đạt (Dave)
+
 ```
