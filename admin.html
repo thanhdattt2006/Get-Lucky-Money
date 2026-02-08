@@ -2,60 +2,109 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>Dashboard // Tokyo Night</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Core System // Administrative Terminal</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="resources/css/admin.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="resources/css/admin.css" />
   </head>
   <body>
-    <div class="app-shell">
-      <header class="app-header">
-        <div class="brand">LIXI_DAT<span>_ADMIN</span></div>
-        <button class="btn-back" onclick="window.location.href = 'index.html'">
-          EXIT SYSTEM
-        </button>
-      </header>
+    <div class="terminal-overlay"></div>
 
-      <div class="toolbar">
-        <div class="select-wrapper">
-          <select id="filter-money" onchange="adminApp.filterData()">
-            <option value="all">FILTER: ALL TRANSACTIONS</option>
-            <option value="10000">FILTER: 10,000 VND</option>
-            <option value="100000">FILTER: 100,000 VND</option>
-            <option value="200000">FILTER: 200,000 VND</option>
-            <option value="500000">FILTER: 500,000 VND</option>
-          </select>
+    <div class="dashboard-wrapper">
+      <aside class="sidebar">
+        <div class="brand-zone">
+          <div class="logo-hexagon">
+            <i data-lucide="shield-check"></i>
+          </div>
+          <div class="brand-text">
+            <span class="main">LIXI_DAT</span>
+            <span class="sub">CORE v2.0</span>
+          </div>
         </div>
-        <button class="btn-destroy" onclick="adminApp.deleteAll()">
-          DELETE ALL DATA
-        </button>
-      </div>
 
-      <div class="data-container">
-        <table id="data-table">
-          <thead>
-            <tr>
-              <th width="10%">ID</th>
-              <th width="35%">USER</th>
-              <th width="30%">AMOUNT</th>
-              <th width="25%">ACTION</th>
-            </tr>
-          </thead>
-          <tbody id="admin-list"></tbody>
-        </table>
-      </div>
+        <nav class="nav-menu">
+          <a href="#" class="nav-item active">
+            <i data-lucide="layout-dashboard"></i> <span>Overview</span>
+          </a>
+          <a href="#" class="nav-item" onclick="adminApp.loadData()">
+            <i data-lucide="refresh-cw"></i> <span>Sync Data</span>
+          </a>
+        </nav>
 
-      <footer class="app-footer">
-        <span class="total-label">REVENUE:</span>
-        <span class="total-value" id="admin-total">0 VND</span>
-      </footer>
+        <div class="system-status">
+          <div class="status-indicator online"></div>
+          <span>SYSTEM ONLINE</span>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <div class="page-info">
+            <h1>Transaction Monitor</h1>
+            <p>Real-time data stream from MockAPI</p>
+          </div>
+          <button
+            class="btn-exit"
+            onclick="window.location.href = 'index.html'"
+          >
+            <i data-lucide="log-out"></i> EXIT TERMINAL
+          </button>
+        </header>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon purple"><i data-lucide="users"></i></div>
+            <div class="stat-info">
+              <span class="label">Total Users</span>
+              <span class="value" id="count-users">0</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><i data-lucide="banknote"></i></div>
+            <div class="stat-info">
+              <span class="label">Total Revenue</span>
+              <span class="value" id="admin-total">0 VND</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-bar">
+          <div class="filter-group">
+            <i data-lucide="filter" class="filter-icon"></i>
+            <select id="filter-money" onchange="adminApp.handleFilter()">
+              <option value="all">ALL TRANSACTIONS</option>
+              <option value="10000">10,000 VND</option>
+              <option value="100000">100,000 VND</option>
+              <option value="200000">200,000 VND</option>
+              <option value="500000">500,000 VND</option>
+            </select>
+          </div>
+          <button class="btn-danger-outline" onclick="adminApp.deleteAll()">
+            <i data-lucide="trash-2"></i> PURGE ALL DATA
+          </button>
+        </div>
+
+        <div class="table-frame">
+          <table id="data-table">
+            <thead>
+              <tr>
+                <th><i data-lucide="hash"></i> ID</th>
+                <th><i data-lucide="user"></i> CLIENT IDENTIFIER</th>
+                <th><i data-lucide="credit-card"></i> AMOUNT</th>
+                <th class="text-right">
+                  <i data-lucide="settings"></i> OPERATIONS
+                </th>
+              </tr>
+            </thead>
+            <tbody id="admin-list"></tbody>
+          </table>
+        </div>
+      </main>
     </div>
 
     <script src="resources/js/admin.js"></script>
